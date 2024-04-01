@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <!-- 파비콘 -->
+    <link rel="shortcut icon" href="favicon.ico" />
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!--  og:이미지 -->
+    <meta property="og:image" content="og_img.jpg" />
+
+    <!-- 폰트 -->
+    <link href="./css/SpoqaHanSansNeo.css" rel="stylesheet" type="text/css" />
+
+    <!-- 리셋 -->
+    <link href="./css/reset.css" rel="stylesheet" type="text/css" />
+
+    <!-- 아이오니콘 -->
+    <link href="./css/ionicons.css" rel="stylesheet" type="text/css" />
+
+    <!-- slick -->
+    <link rel="stylesheet" href="./slick/slick.css">
+    <link rel="stylesheet" href="./slick/slick-theme.css">
+
+    <!-- css -->
+    <link rel="stylesheet" href="./css/main.css" />
+
+    <!-- 제이쿼리 -->
+    <script type="text/javascript" src="./js/jquery-3.6.0.min.js"></script>
+    <!-- slick -->
+    <script type="text/javascript" src="./js/slick.js"></script>
+    <!-- amchart 온라인 방식만 지원-->
+    <script src="//cdn.amcharts.com/lib/5/index.js"></script>
+    <script src="//cdn.amcharts.com/lib/5/wc.js"></script>
+    <script src="//cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+    <!-- lottie-player -->
+    <script src="./js/lottie-player.js"></script>
+    <script>
+        $(document).ready(function() {
+            //  메뉴버튼
+            $('.gnb_area .wrap_btn').click(function() {
+                $(this).find('.btn_call_menu').toggleClass('on');
+                $('.gnb').toggleClass('on');
+            });
+            //  카로셀 설정 ,  nested 사용 예정이 없어 swiper보다  좀더 가벼운  slick 사용
+            $('.slide_01').slick({
+                infinite: true,
+                slidesToShow: 1,
+                speed: 500,
+                drggable: true,
+                arrows: false,
+                dots: true,
+                autoplay: true,
+                autoplaySpeed: 4000,
+                pauseOnHover: true,
+                fade: true,
+
+            });
+        });
+    </script>
+    <title>Moon's Portfolio</title>
+</head>
+
+<body>
+    <div class="wrap_main">
+        <div class="wrap_gnb">
+            <h1 class="tit">
+                Moon's Portfolio
+            </h1>
+            <nav class="gnb_area">
+                <div class="wrap_btn">
+                    <button class="btn_call_menu on">
+                        <i class="ion-android-menu call_menu"></i>
+                        <span class="ir">
+                            메뉴열기
+                        </span>
+                    </button> <button class="btn_call_menu">
+                        <i class="ion-android-close call_menu"></i>
+                        <span class="ir">
+                            메뉴닫기
+                        </span>
+                    </button>
+                </div>
+
+                <ul class="gnb">
+                    <li>
+                        <a href="">
+                            <i class="ion-social-instagram"></i> <span class="txt">인스타 그램</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="">
+                            <i class="ion-android-send"></i><span class="txt">이메일</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="">
+                            <i class="ion-android-hangout"></i> <span class="txt">더미</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            <div class="search_area">
+                <button class="btn_call_search">
+                    <i class="ion-android-search call_seach"></i>
+                    <span class="ir">
+                        검색
+                    </span>
+                </button>
+            </div>
+        </div>
+        <div id="content">
+            <section class="chart_area">
+                <h3 class="tit_section">반응형 포트폴리오</h3>
+                <p class="sub_tit">
+                    <!-- amchart 및 Lottie br & codepen 참조 -->
+                </p>
+                <button class="chart_action">
+                    <i class="ion-ios-color-wand"></i>
+                    After Study
+                </button>
+                <div id="chartdiv"></div>
+                <!-- ??? 이 div의 의미 ??? -->
+
+                <div class="lottie on">
+                    <lottie-player src="./images/45534-team.json" background="transparent" speed="1" loop autoplay>
+                    </lottie-player>
+                </div>
+                <div class="lottie">
+                    <lottie-player src="./images/75296-developer-01-whoooa.json" background="transparent" speed="1" loop autoplay>
+                    </lottie-player>
+                </div>
+                <script>
+                    //  챠트의 설정은 codepen에서 원하는 내용을 찾아 적용하였습니다.
+                    var root = am5.Root.new("chartdiv");
+                    root.setThemes([
+                        am5themes_Animated.new(root)
+                    ]);
+                    var container = root.container.children.push(am5.Container.new(root, {
+                        width: am5.percent(100),
+                        height: am5.percent(100),
+                        layout: root.gridLayout
+                    }));
+                    var series = container.children.push(am5wc.WordCloud.new(root, {
+                        categoryField: "tag",
+                        valueField: "weight",
+                        calculateAggregates: true
+                    }));
+                    series.set("heatRules", [{
+                        target: series.labels.template,
+                        dataField: "value",
+                        min: am5.color(0x000000),
+                        max: am5.color(0x000000),
+                        key: "fill"
+                    }]);
+                    series.labels.template.setAll({
+                        paddingTop: 5,
+                        paddingBottom: 5,
+                        paddingLeft: 10,
+                        paddingRight: 10,
+                        fontFamily: "Spoqa Han Sans Neo",
+                        cursorOverStyle: "pointer"
+                    });
+                    series.labels.template.events.on("click", function(ev) {
+                        const category = ev.target.dataItem.get("category");
+                        window.open(" https://www.google.com/search?q=" + encodeURIComponent(category));
+                    });
+                    var data_1 = [{
+                            tag: "유튜브",
+                            weight: 0.12
+                        }, {
+                            tag: "주식",
+                            weight: 0.11
+                        }, {
+                            tag: "금리",
+                            weight: 0.1
+                        }, {
+                            tag: "트렌드",
+                            weight: 0.1
+                        }, {
+                            tag: "날씨",
+                            weight: 0.
+                        }, {
+                            tag: "코로나",
+                            weight: 0.5
+                        }, {
+                            tag: "점심은?",
+                            weight: 0.3
+                        }
+
+                    ]
+                    var data_2 = [{
+                            tag: "시멘틱 마크업",
+                            weight: 0.12
+                        }, {
+                            tag: "CSS",
+                            weight: 0.12
+                        }, {
+                            tag: "JavaScript",
+                            weight: 0.2
+                        }, {
+                            tag: "SASS",
+                            weight: 0.1
+                        }, {
+                            tag: "바닐라",
+                            weight: 0.05
+                        }, {
+                            tag: "NODE",
+                            weight: 0.03
+                        }, {
+                            tag: "퍼블리셔",
+                            weight: 0.1
+                        }, {
+                            tag: "CHART",
+                            weight: 0.06
+                        }, {
+                            tag: "VUE",
+                            weight: 0.07
+                        }, {
+                            tag: "npm",
+                            weight: 0.06
+                        },
+
+                    ]
+                    series.data.setAll(
+                        data_1
+                    );
+                    setInterval(function() {
+                        am5.array.each(series.dataItems, function(dataItem) {
+                            var value = Math.random() * 65;
+                            value = value - Math.random() * value;
+                            dataItem.set("value", value);
+                            dataItem.set("valueWorking", value);
+                        })
+                    }, 3000)
+
+                    function selectDataset(set) {
+                        series.data.setAll(
+                            set
+                        );
+                        series.set("heatRules", [{
+                            target: series.labels.template,
+                            dataField: "value",
+                            min: am5.color(0xFFD4C2),
+                            max: am5.color(0xFF621F),
+                            key: "fill"
+                        }]);
+                        $('.lottie').toggleClass('on')
+                    }
+                    $('.chart_action').click(function() {
+                        selectDataset(data_2)
+                        $(this).hide()
+                    })
+                </script>
+            </section>
+
+            <section class="slide_area">
+                <h2 class="tit_section">2024 웹 트렌드</h2>
+                <ul class="slide_01 card_00">
+                    <li class="type_00">
+                        <a target="_blank" href="https://99designs.com/blog/trends/web-design-trends/#3">
+                            <div class="img_area">
+                                <img src="./images/sl_01.png" alt="Retro revolution">
+                            </div>
+                            <div class="txt_box">
+                                <h3 class="tit_card">
+                                    1. Newtro
+                                </h3>
+                                <p class="txt">뉴트로는 2024년에도 대담한 색상과 패턴을 가지고 다방면에 영향을 미치고 있습니다.</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="type_00">
+                        <a target="_blank" href="https://99designs.com/blog/trends/web-design-trends/#4">
+                            <div class="img_area">
+                                <img src="./images/sl_02.png" alt="Visible borders">
+                            </div>
+                            <div class="txt_box">
+                                <h3 class="tit_card">2. Visible borders</h3>
+                                <p class="txt">2024년에는 단순한 테두리와 프레임을 통해 기초를 드러내는 레이아웃으로 좀 더 현실감 있게 만드려고 합니다.</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="type_00">
+                        <a target="_blank" href="https://99designs.com/blog/trends/web-design-trends/#9">
+                            <div class="img_area">
+                                <img src="./images/sl_03.png" alt="Retro revolution">
+                            </div>
+                            <div class="txt_box">
+                                <h3 class="tit_card">3. AI generated graphics</h3>
+                                <p class="txt">
+                                    2024년에는 관련 인터페이스를 육성하기 위해 AI 그래픽의 증가가 예상됩니다. 그러나 디지털 도구에 의존하면 불완전한 예술 작품으로 얻을 수 있는 개성을 놓치기 쉽습니다. </p>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </section>
+            <section class="skill_area">
+                <h2 class="tit_section">관심 기술</h2>
+                <ul class="card_01">
+                    <li>
+                        <!-- ??? li 클래스를 비워둔 이유 ??? -->
+                        <a href="https://lottiefiles.com/web-player?gclid=CjwKCAjwsJ6TBhAIEiwAfl4TWDPYIYh1yUp-LKxi04ds0awaN17H2boIovWrNcsEdCma_mxBdBWPiBoCqM4QAvD_BwE" target="_blank">
+                            <div class="img_area">
+                                <img src="images/lottie.png" alt="Lottie 이미지">
+                            </div>
+                            <div class="txt_box">
+                                <h3 class="tit_card">
+                                    <strong><i class="ion-film-marker"></i>Lottie.js</strong>
+                                </h3>
+                                <p class="txt ">
+
+                                    모든 웹사이트를 위한 강력한 웹 플레이어
+                                </p>
+                                <p class="site ">https://lottiefiles.com/</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://git-scm.com/ " target="_blank ">
+                            <div class="img_area ">
+                                <img src="images/git.png " alt="Lottie 이미지 ">
+                            </div>
+                            <div class="txt_box ">
+                                <h3 class="tit_card ">
+                                    <strong><i class="ion-merge"></i>git.js</strong>
+                                </h3>
+                                <p class="txt "> 빠르고 효율적으로 처리하도록 설계된 무료 오픈 소스 분산 버전 제어 시스템
+                                </p>
+                                <p class="site ">https://git-scm.com/</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.amcharts.com/javascript-charts/ " target="_blank ">
+                            <div class="img_area ">
+                                <img src="images/amcharts.png " alt="Lottie 이미지 ">
+                            </div>
+                            <div class="txt_box ">
+                                <h3 class="tit_card ">
+                                    <strong><i class="ion-arrow-graph-up-right"></i> amCharts.js</strong>
+                                </h3>
+                                <p class="txt "> 간단하면서도 강력하고 유연한 드롭인 데이터 시각화 챠트 솔루션.</p>
+                                <p class="site ">https://www.amcharts.com/javascript-charts/</p>
+                            </div>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://sass-lang.com/ " target="_blank ">
+                            <div class="img_area ">
+                                <img src="images/sass.png " alt="sass-lang 이미지 ">
+                            </div>
+                            <div class="txt_box ">
+                                <h3 class="tit_card ">
+                                    <strong><i class="ion-social-sass"></i> sass-lang</strong>
+                                </h3>
+                                <p class="txt ">Sass는 햄튼 캐틀린이 설계하고 나탈리 바이첸바움이 개발한 CSS 전처리 도구</p>
+                                <p class="site ">https://sass-lang.com/</p>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+            </section>
+            <section class="profile_area">
+                <h2 class="tit_section">
+                    Profile
+                </h2>
+                <div class="profile_card">
+                    <h3 class="tit_profile">
+                        Moongb
+                    </h3>
+                    <dl class="profile_list">
+                        <dt>email</dt>
+                        <dd>
+                            <a href="mailto:email@gamil.com" class=""><i class="ion-email"></i> bmcq9802@gamil.com</a>
+                        </dd>
+                    </dl>
+                    <dl class="profile_list">
+                        <dt>Skill</dt>
+                        <dd>
+                            Html , CSS , JQUERY
+                        </dd>
+                    </dl>
+                    <dl class="profile_list">
+                        <dt>Tool</dt>
+                        <dd>
+                            VSCODE, GIT, PHOTOSHOP
+                        </dd>
+                    </dl>
+                    <!-- * 카카오맵 - 지도퍼가기 -->
+                    <!-- 1. 지도 노드 -->
+                    <div id="daumRoughmapContainer1651042328059" class="root_daum_roughmap root_daum_roughmap_landing">
+                    </div>
+                    <!-- 2. 설치 스크립트* 지도 퍼가기 서비스를 2개 이상 넣을 경우, 설치 스크립트는 하나만 삽입합니다.-->
+                    <script charset="UTF-8" class="daum_roughmap_loader_script" src="https://ssl.daumcdn.net/dmaps/map_js_init/roughmapLoader.js"></script>
+
+                    <!-- 3. 실행 스크립트 -->
+                    <script charset="UTF-8">
+                        new daum.roughmap.Lander({
+                            "timestamp": "1651042328059",
+                            "key": "2az7a",
+                            "mapWidth": "1200",
+                            "mapHeight": "360"
+                        }).render();
+                    </script>
+                </div>
+            </section>
+        </div>
+        <div class="footer">
+            <p class="copyright">
+                Copyright(C)2022.All rights reserved by Moon
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>

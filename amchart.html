@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8" />
+    <!-- 파비콘 -->
+    <link rel="shortcut icon" href="favicon.ico" />
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--  og:이미지 -->
+    <meta property="og:image" content="og_img.jpg" />
+
+    <!-- 폰트 -->
+    <link href="./css/SpoqaHanSansNeo.css" rel="stylesheet" type="text/css" />
+
+    <!-- 리셋 -->
+    <link href="./css/reset.css" rel="stylesheet" type="text/css" />
+
+    <!-- 아이오니콘 -->
+    <link href="./css/ionicons.css" rel="stylesheet" type="text/css" />
+
+    <!-- slick -->
+    <link rel="stylesheet" href="./slick/slick.css">
+    <!-- <link rel="stylesheet" href="./slick/slick-theme.css"> -->
+
+    <!-- css -->
+    <link rel="stylesheet" href="./css/style_ysk.css" />
+
+    <!-- js -->
+
+    <script type="text/javascript" src="./slick/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript" src="./slick/slick.min.js"></script>
+    <!-- amchart -->
+    <script src="//cdn.amcharts.com/lib/5/index.js"></script>
+    <script src="//cdn.amcharts.com/lib/5/wc.js"></script>
+    <script src="//cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+    <title>Moon's Pofol</title>
+</head>
+
+<body>
+    <button onclick="selectDataset(data_2)">변화</button>
+    <div id="chartdiv"></div>
+
+    <style>
+        #chartdiv {
+            width: 100vw;
+            height: 100vw;
+        }
+    </style>
+    <script>
+        var root = am5.Root.new("chartdiv");
+
+
+        root.setThemes([
+            am5themes_Animated.new(root)
+        ]);
+
+
+
+        var container = root.container.children.push(am5.Container.new(root, {
+            width: am5.percent(100),
+            height: am5.percent(100),
+            layout: root.gridLayout
+        }));
+
+
+        // Add series
+        // https://www.amcharts.com/docs/v5/charts/word-cloud/
+        var series = container.children.push(am5wc.WordCloud.new(root, {
+            categoryField: "tag",
+            valueField: "weight",
+            calculateAggregates: true // this is needed for heat rules to work
+        }));
+
+
+        // Set up heat rules
+        // https://www.amcharts.com/docs/v5/charts/word-cloud/#Via_heat_rules
+        series.set("heatRules", [{
+            target: series.labels.template,
+            dataField: "value",
+            min: am5.color(0xFFD4C2),
+            max: am5.color(0xFF621F),
+            key: "fill"
+        }]);
+
+
+        // Configure labels
+        series.labels.template.setAll({
+            paddingTop: 5,
+            paddingBottom: 5,
+            paddingLeft: 10,
+            paddingRight: 10,
+            fontFamily: "Spoqa Han Sans Neo",
+            cursorOverStyle: "pointer"
+        });
+
+
+        series.labels.template.events.on("click", function(ev) {
+            const category = ev.target.dataItem.get("category");
+            window.open(" https://www.google.com/search?q=" + encodeURIComponent(category));
+        });
+
+        var data_1 = [{
+                tag: "유튜브",
+                weight: 0.02
+            }, {
+                tag: "주식",
+                weight: 0.01
+            }, {
+                tag: "금리",
+                weight: 0.1
+            }, {
+                tag: "트렌드",
+                weight: 0.1
+            }, {
+                tag: "날씨",
+                weight: 0.15
+            }, {
+                tag: "웹개발",
+                weight: 0.05
+            }, {
+                tag: "점심은?",
+                weight: 0.3
+            }
+
+        ]
+
+
+        var data_2 = [{
+                tag: "시멘틱 마크업",
+                weight: 0.12
+            }, {
+                tag: "CSS",
+                weight: 0.12
+            }, {
+                tag: "JavaScript",
+                weight: 0.2
+            }, {
+                tag: "SASS",
+                weight: 0.1
+            }, {
+                tag: "바닐라",
+                weight: 0.05
+            }, {
+                tag: "NODE",
+                weight: 0.03
+            }, {
+                tag: "퍼블리셔",
+                weight: 0.1
+            }, {
+                tag: "CHART",
+                weight: 0.06
+            }, {
+                tag: "VUE",
+                weight: 0.07
+            }, {
+                tag: "npm",
+                weight: 0.06
+            },
+
+        ]
+
+
+        series.data.setAll(
+            data_1
+        );
+        setInterval(function() {
+            am5.array.each(series.dataItems, function(dataItem) {
+                var value = Math.random() * 65;
+                value = value - Math.random() * value;
+                dataItem.set("value", value);
+                dataItem.set("valueWorking", value);
+            })
+        }, 3000)
+
+        function selectDataset(set) {
+            series.data.setAll(
+                set
+            );
+        }
+    </script>
+</body>
+
+</html>
